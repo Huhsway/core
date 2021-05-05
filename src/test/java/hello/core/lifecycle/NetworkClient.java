@@ -1,8 +1,11 @@
 package hello.core.lifecycle;
 
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+
 import java.sql.SQLOutput;
 
-public class NetworkClient {
+public class NetworkClient implements InitializingBean, DisposableBean {
 
     private String url;
 
@@ -28,6 +31,17 @@ public class NetworkClient {
     // 서비스 종료시 호출
     public void disconnect() {
         System.out.println("close: " + url);
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        connect();
+        call("초기화 연결 메시지");
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        disconnect();
     }
 
 }
